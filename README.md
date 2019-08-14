@@ -1,37 +1,39 @@
 # Alacritty Color Export
 
-A temporary, Regex based solution to export generated (Wal) colors into Alacritty configuration with one command.
+A temporary, Regex based solution to export generated (Wal) colors into Alacritty config with one command.
 
-**Warning:** It may corrupt your Alacritty configuration file unless script isn't outdated. Don't forget to backup the config first!
+**Warning:** If the latest Alacritty [release](https://github.com/jwilm/alacritty/releases/latest) outdates the script and includes any changes on config syntax it may corrupt your Alacritty config. Don't forget to backup your config first!
 
 Currently tested on macOS 10.14.6 with Alacritty **0.3.3** and worked as intended.
 Sed commands may differ on untested distros and give errors.
 
 ## Initial Purpose
-Currently there's no easy way to set colors generated via [wal](https://github.com/dylanaraps/pywal/) in macOS systems. So I created this script to automatically update colors.
+Currently there's no easy way to send [wal](https://github.com/dylanaraps/pywal/) colors to alacritty config in Mac. So I created this script to automatically update colors as a temporary solution.
 
 ## Installation
-**Dependencies:** bash, grep, sed
+**Deps:** grep, sed
 
-You can simply go to raw file and save the file to your script directory or open your terminal emulator:
+You can simply go to [raw file](https://github.com/egeesin/alacritty-color-export/raw/master/script.sh) and save the file to your script directory or open your terminal emulator:
 
 ```sh
-git clone https://github.com/egeesin/alacritty-wal-mac
-cd alacritty-wal-mac
+git clone https://github.com/egeesin/alacritty-color-export
+cd alacritty-color-export
 chmod +x script.sh
 ```
 
 ## Usage
 Before executing the script, comment existing color declarations out in order to avoid duplication errors and keep your initial colors.
-Also to get colors, you must have run ``wal`` once. if you already did, then...
+Also to get colors, you must have run ``wal -i <image.png>`` (or ``wal -ni <image.png>`` if you on Mac) once. If you already did, then...
 
 ```sh
-# Execute with default config
+# Execute
 ./script.sh
 
-# Execute with custom path
-./script.sh <config>
+# Execute with custom config
+./script.sh <config.yml>
 ```
+
+**IMPORTANT:** In the mean time, after successful exportation, don't delete or move ``# BEGIN ACE`` and ``# END ACE`` in your main config file. Otherwise, next time you execute this script, when sed command can't find BEGIN ACE, wipes out whole config. If you have any safer alternative solutions please feel free to create new PR.
 
 ## Example
 
@@ -41,7 +43,7 @@ Also to get colors, you must have run ``wal`` once. if you already did, then...
 $ ./script.sh
 ```
 
-##### .cache/wal/colors:
+##### Input (~/.cache/wal/colors):
 
 ```
 #0e0400
@@ -62,41 +64,43 @@ $ ./script.sh
 #f5e6c6
 ```
 
-##### alacritty.yml:
+##### Output (alacritty.yml):
 
 ```yaml
 # BEGIN ACE
-colors.normal.black: '0x151718'
-colors.normal.red: '0xcd3f45'
-colors.normal.green: '0x9fca56'
-colors.normal.yellow: '0xe6cd69'
-colors.normal.blue: '0x55b5db'
-colors.normal.magenta: '0xa074c4'
-colors.normal.cyan: '0x55dbbe'
-colors.normal.white: '0xd6d6d6'
-colors.bright.black: '0x41535b'
-colors.bright.red: '0xcd3f45'
-colors.bright.green: '0x9fca56'
-colors.bright.yellow: '0xe6cd69'
-colors.bright.blue: '0x55b5db'
-colors.bright.magenta: '0xa074c4'
-colors.bright.cyan: '0x55dbbe'
-colors.bright.white: '0xffffff'
-colors.primary.background: '0x151718'
-colors.primary.foreground: '0xd6d6d6'
-colors.cursor.text: '0x151718'
-colors.cursor.cursor: '0xd6d6d6'
-colors.selection.text: '0x151718'
-colors.selection.background: '0xd6d6d6'
+colors:
+  primary:
+    background: '0x0e0400'
+    foreground: '0xf5e6c6'
+  cursor:
+    text:       '0x0e0400'
+    cursor:     '0xf5e6c6'
+  normal:
+    black:      '0x0e0400'
+    red:        '0xBB6E37'
+    green:      '0xAE8F38'
+    yellow:     '0xC3913F'
+    blue:       '0xDBAA4B'
+    magenta:    '0xF7C95E'
+    cyan:       '0xE3BB87'
+    white:      '0xf5e6c6'
+  bright:
+    black:      '0xaba18a'
+    red:        '0xBB6E37'
+    green:      '0xAE8F38'
+    yellow:     '0xC3913F'
+    blue:       '0xDBAA4B'
+    magenta:    '0xF7C95E'
+    cyan:       '0xE3BB87'
+    white:      '0xf5e6c6'
 # END ACE
 ```
 
 ## Related Links
-- [pywal - Alacritty doesn't seem to be working with wal #37](https://github.com/dylanaraps/pywal/issues/37)
+- [pywal Issue #37 - Alacritty doesn't seem to be working with wal](https://github.com/dylanaraps/pywal/issues/37)
 
 ## Known Issues
-- If there's any symlink in config destination, it brokes.
-- If there isn't # BEGIN ACE comment, the script wipes out whole config.
+- If there isn't ``# BEGIN ACE`` comment, the script wipes out whole config.
 
 ## Roadmap
 - [ ] Fix critical issues

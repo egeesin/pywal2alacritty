@@ -3,11 +3,13 @@
 # Version 0.1.0
 # github.com/egeesin
 #
-# Exports generated Wal colors to Alacritty config on your Mac
-# WARNING: Don't forget to backup your Alacritty config before execute this script!
+# Exports generated Wal colors to Alacritty config
+# WARNING: Don't forget to backup your Alacritty config
+# before execute this script!
 #
-# Dependencies: bash, grep, sed, awk
-# Usage: <scriptname> <config.yml(optional)>
+# Dependencies: bash, grep, sed
+# Usage: ./script.sh
+#        ./script.sh <config yml>
 
 # Get Wal color file
 SRC=${HOME}"/.cache/wal/colors"
@@ -45,36 +47,16 @@ done
 if grep -q '^# BEGIN ACE' "$CFG"; then
 	echo "Existing 'generated' colors found, replacing new colors...'"
 	sed -i '' -e '/^# BEGIN ACE/,/^# END ACE/{/^# BEGIN ACE/!{/^# END ACE/!d;};}' "$CFG"
-# ^ There's something wrong with this command. If BEGIN ACE comment doesn't exist but END ACE, just deletes all config except END ACE line. Surrounding commands must not edited, until finding safer version of this command.
+# ^^^ There's something wrong with this command. If BEGIN ACE comment
+# doesn't exist but END ACE, just deletes all config except END ACE line.
+# In the mean time, surrounding comments must not touched, until finding
+# safer version of this command.
 else
 	echo "There's no existing 'generated' colors, adding comments...";
 	echo -e '# BEGIN ACE\n# END ACE' >> "$CFG";
 fi
-# ^ This line may give error on different systems.
 
-# colors.normal.black:         '$color1'
-# colors.normal.red:           '$color2'
-# colors.normal.green:         '$color3'
-# colors.normal.yellow:        '$color4'
-# colors.normal.blue:          '$color5'
-# colors.normal.magenta:       '$color6'
-# colors.normal.cyan:          '$color7'
-# colors.normal.white:         '$color8'
-# colors.bright.black:         '$color9'
-# colors.bright.red:           '$color10'
-# colors.bright.green:         '$color11'
-# colors.bright.yellow:        '$color12'
-# colors.bright.blue:          '$color13'
-# colors.bright.magenta:       '$color14'
-# colors.bright.cyan:          '$color15'
-# colors.bright.white:         '$color16'
-# colors.primary.background:   '$color1'
-# colors.primary.foreground:   '$color8'
-# colors.cursor.text:          '$color1'
-# colors.cursor.cursor:        '$color8'
-# colors.selection.text:       '$color1'
-# colors.selection.background: '$color8'
-
+# vvv This line may give error on different systems.
 sed -i '' -e "/^# BEGIN ACE/ r /dev/stdin" "$CFG" <<EOF
 colors:
   primary:
