@@ -4,7 +4,7 @@ A temporary, Regex based solution to export generated (Wal) colors into Alacritt
 
 **Warning:** If the latest Alacritty [release](https://github.com/jwilm/alacritty/releases/latest) outdates the script and includes any changes on config syntax it may corrupt your Alacritty config. Don't forget to backup your config first!
 
-Currently tested on macOS 10.14.6 with Alacritty **0.3.3** and worked as intended.
+Currently tested on macOS 10.14.6 and 10.15.2 with Alacritty **0.3.3** and worked as intended.
 Sed commands may differ on untested distros and give errors.
 
 ## Initial Purpose
