@@ -25,7 +25,7 @@ SRC="$HOME"/.cache/wal/colors.sh
 [ -e "$SRC" ] || die "Wal colors not found, exiting script. Have you executed Wal before?"
 printf "Colors found, source ready.\n"
 
-READLINK=$( command -v greadlink | command -v readlink )
+READLINK=$( command -v greadlink || command -v readlink )
 
 # Get config file
 if [ -n "$1" ]; then
