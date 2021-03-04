@@ -21,7 +21,7 @@ chmod +x script.sh
 
 ## Usage
 Before executing the script, comment existing color declarations out in order to avoid duplication errors and keep your initial colors.
-Also to get colors, you must have run ``wal -i <image.png>`` (or ``wal -ni <image.png>`` if youon Mac) once. If you already did, then...
+Also to get colors, you must have run ``wal -i <image.png>`` (or ``wal -ni <image.png>`` if you on Mac) once. If you already did, then...
 
 ```sh
 # Execute
