@@ -1,4 +1,4 @@
-/#!/bin/sh
+#!/bin/sh
 # Alacritty Color Export
 # Version 0.1.1
 # github.com/egeesin
