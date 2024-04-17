@@ -1,17 +1,16 @@
-# Alacritty Color Export
+# `pywal2alacritty`
 
-A temporary, Regex based solution to export generated (Wal) colors into Alacritty config with one command.
+> 🎨 A shell script to get colors from [Pywal](https://github.com/dylanaraps/pywal) and apply to [Alacritty](https://alacritty.org/config-alacritty.html) TOML config with regular expressions.
 
-Tested on macOS (10.14.6, 10.15.2, 11.2.1) with Alacritty (0.3.3, 0.4.2-dev, **0.6.0**) and works as intended.
-Sed commands may differ on untested distros and give errors.
+## 🤔 Why?
+Currently, there's no easy way to send [wal](https://github.com/dylanaraps/pywal/) colors to Alacritty config in macOS. So I wrote this script to auto-update colors as a workaround.
 
-## Initial Purpose
-Currently there's no easy way to send [wal](https://github.com/dylanaraps/pywal/) colors to alacritty config in Mac. So I created this script to automatically update colors as a temporary solution.
+## 🔽 Setup
+**Dependencies:** `grep`, `sed`
 
-## Installation
-**Deps:** grep, sed
+Go to [raw file](https://github.com/egeesin/alacritty-color-export/raw/master/script.sh) and save to your script directory ($PATH) or open your terminal emulator:
 
-You can simply go to [raw file](https://github.com/egeesin/alacritty-color-export/raw/master/script.sh) and save the file to your script directory or open your terminal emulator:
+**Note:** If you're behind Alacritty [13.0.0](https://alacritty.org/changelog_0_13_0.html), get the script from v0.1.1 release in [Tags](https://github.com/egeesin/pywal2alacritty/tags) list in order to import colors to .
 
 ```sh
 git clone https://github.com/egeesin/alacritty-color-export
@@ -19,100 +18,122 @@ cd alacritty-color-export
 chmod +x script.sh
 ```
 
-## Usage
-Before executing the script, comment existing color declarations out in order to avoid duplication errors and keep your initial colors.
-Also to get colors, you must have run ``wal -i <image.png>`` (or ``wal -ni <image.png>`` if you on Mac) once. If you already did, then...
+## 🎛️ Usage
+Before executing the script, comment existing color declarations out in order to avoid duplication errors and keep your initial colors (No need if you have your colors imported somewhere else).
+Also make sure you run ``wal -i <image.png>`` (or ``wal -ni <image.png>`` if you're on macOS) at least once to have the colors ready in your Wal cache folder so the script can convert it.
 
 ```sh
-# Execute
-./script.sh
+# Run the script
+./path/to/script.sh
 
-# Execute with custom config
-./script.sh <config.yml>
+# Run the script with custom config path
+./path/to/script.sh <config.toml>
 ```
 
-## Example
+## 🚧 Example
 
-##### Terminal emulator:
-
-```bash
-$ ./script.sh
+**1. Terminal Emulator**
+```sh
+$ ./path/to/script.sh
 ```
 
-##### Input (~/.cache/wal/colors.sh):
-
-```
+**2. Input (`~/.cache/wal/colors.sh`):**
+```sh
 ...
-color0='#0a0c0a'
-color1='#514739'
-color2='#6B4F39'
-color3='#776338'
-color4='#5E5747'
-color5='#936843'
-color6='#75936F'
-color7='#d6c6a6'
-color8='#958a74'
-color9='#514739'
-color10='#6B4F39'
-color11='#776338'
-color12='#5E5747'
-color13='#936843'
-color14='#75936F'
-color15='#d6c6a6'
+# Special
+background='#180f18'
+foreground='#cbc2e1'
+cursor='#cbc2e1'
+
+# Colors
+color0='#180f18'
+color1='#6A538E'
+color2='#464AAB'
+color3='#916A98'
+color4='#C569B5'
+color5='#EBB0B2'
+color6='#AD93D5'
+color7='#cbc2e1'
+color8='#8e879d'
+color9='#6A538E'
+color10='#464AAB'
+color11='#916A98'
+color12='#C569B5'
+color13='#EBB0B2'
+color14='#AD93D5'
+color15='#cbc2e1'
 ...
 ```
 
-##### Output (~/.config/alacritty/alacritty.yml):
-
-```yaml
+**3. Output (Default Alacritty config path: `~/.config/alacritty/alacritty.toml`):**
+```toml
 ...
+
+[window.padding]
+x = 12
+y = 22
+
 # BEGIN ACE
-colors:
-  primary:
-    background: '#0a0c0a'
-    foreground: '#d6c6a6'
-  cursor:
-    text:       '#0a0c0a'
-    cursor:     '#d6c6a6'
-  normal:
-    black:      '#0a0c0a'
-    red:        '#514739'
-    green:      '#6B4F39'
-    yellow:     '#776338'
-    blue:       '#5E5747'
-    magenta:    '#936843'
-    cyan:       '#75936F'
-    white:      '#d6c6a6'
-  bright:
-    black:      '#958a74'
-    red:        '#514739'
-    green:      '#6B4F39'
-    yellow:     '#776338'
-    blue:       '#5E5747'
-    magenta:    '#936843'
-    cyan:       '#75936F'
-    white:      '#d6c6a6'
+[colors.primary]
+background = '#180f18'
+foreground = '#cbc2e1'
+
+[colors.cursor]
+text   = '#180f18' # Apply background color to color of text inside cursor
+cursor = '#cbc2e1' # Apply foreground color to color of cursor
+
+[colors.vi_mode_cursor]
+text    = '#180f18' # Same as above
+cursor  = '#cbc2e1'
+
+[colors.search.matches]
+foreground = '#180f18' # Same as above
+background = '#cbc2e1' # Apply bright/white color to bg color of matching search
+
+[colors.search.focused_match]
+foreground = 'CellBackground'
+background = 'CellForeground'
+
+[colors.line_indicator]
+foreground = 'None'
+background = 'None'
+
+[colors.footer_bar]
+foreground = '#8e879d'
+background = '#cbc2e1'
+
+[colors.selection]
+text       = 'CellBackground'
+background = 'CellForeground'
+
+[colors.normal]
+black   = '#180f18'
+red     = '#6A538E'
+green   = '#464AAB'
+yellow  = '#916A98'
+blue    = '#C569B5'
+magenta = '#EBB0B2'
+cyan    = '#AD93D5'
+white   = '#cbc2e1'
+
+[colors.bright]
+black   = '#8e879d'
+red     = '#6A538E'
+green   = '#464AAB'
+yellow  = '#916A98'
+blue    = '#C569B5'
+magenta = '#EBB0B2'
+cyan    = '#AD93D5'
+white   = '#cbc2e1'
 # END ACE
 ```
+**Note:** If you'd like to have different colors for cursor, search matches/focuses from Vi-mode of Alacritty, edit the `script.sh` based on variables like $color1, $color2 etc.
 
-## Known Issues
-- ~~If there isn't ``# BEGIN ACE`` comment, the script wipes out whole config.~~
-
-## Roadmap
-- [x] Fix critical issues
-- [ ] Make use of config import
-  - [ ] Remove necessity of surrounding comments for not corrupt config
-- [ ] Handle indented lines instead of repeated group names
-- [ ] Option to disable cursor and selection colors
-- [ ] Add subcommands to define input (colors) and output (Alacritty config) path
-- [ ] Support for different default config path for different OS
-- [ ] An option to clean all possible duplicate color declarations and generate new ones
-
-## Related Links
+## 🔗 Related Links
 - [pywal Issue #37 - Alacritty doesn't seem to be working with wal](https://github.com/dylanaraps/pywal/issues/37)
 
-## Contribution
+## 🤝 Contribution
 Don't forget to backup config and thank you for your contribution in advance. Any information from testing on different systems would valuable to anyone who interested in this script. Issues and PR's are welcomed.
 
-## License
+## 🤷 License
 This software is under [The Do What The Fuck You Want To Public License (WTFPL)](http://www.wtfpl.net/about/).
